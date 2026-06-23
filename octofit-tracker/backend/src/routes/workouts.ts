@@ -1,14 +1,16 @@
 import { Router } from 'express'
+import Workout from '../models/workout'
 
 const router = Router()
 
 router.get('/', async (_req, res) => {
-  res.json({ workouts: [] })
+  const workouts = await Workout.find().populate('user team').lean()
+  res.json({ workouts })
 })
 
 router.post('/', async (req, res) => {
-  const workout = req.body
-  // TODO: persist workout
+  const payload = req.body
+  const workout = await Workout.create(payload)
   res.status(201).json({ workout })
 })
 

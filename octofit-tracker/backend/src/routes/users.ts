@@ -1,16 +1,18 @@
 import { Router } from 'express'
+import User from '../models/user'
 
 const router = Router()
 
-// GET /api/users/ - list users (placeholder)
+// GET /api/users/ - list users
 router.get('/', async (_req, res) => {
-  res.json({ users: [] })
+  const users = await User.find().lean()
+  res.json({ users })
 })
 
-// POST /api/users/ - create user (placeholder)
+// POST /api/users/ - create user
 router.post('/', async (req, res) => {
-  const user = req.body
-  // TODO: persist user with Mongoose model
+  const payload = req.body
+  const user = await User.create(payload)
   res.status(201).json({ user })
 })
 

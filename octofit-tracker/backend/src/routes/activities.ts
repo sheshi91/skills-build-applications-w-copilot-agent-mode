@@ -1,14 +1,16 @@
 import { Router } from 'express'
+import Activity from '../models/activity'
 
 const router = Router()
 
 router.get('/', async (_req, res) => {
-  res.json({ activities: [] })
+  const activities = await Activity.find().populate('user').lean()
+  res.json({ activities })
 })
 
 router.post('/', async (req, res) => {
-  const activity = req.body
-  // TODO: persist activity
+  const payload = req.body
+  const activity = await Activity.create(payload)
   res.status(201).json({ activity })
 })
 

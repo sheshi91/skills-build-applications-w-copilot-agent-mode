@@ -1,14 +1,16 @@
 import { Router } from 'express'
+import Team from '../models/team'
 
 const router = Router()
 
 router.get('/', async (_req, res) => {
-  res.json({ teams: [] })
+  const teams = await Team.find().populate('members').lean()
+  res.json({ teams })
 })
 
 router.post('/', async (req, res) => {
-  const team = req.body
-  // TODO: persist team
+  const payload = req.body
+  const team = await Team.create(payload)
   res.status(201).json({ team })
 })
 
